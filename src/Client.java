@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,11 +14,11 @@ public class Client {
         System.out.println("Enter '1' for Acyclic labelling (OR) '2' for Cyclic labelling: ");
         int labelType=scanner.nextInt();
 
-        int totalNodes=(rootNodes*(rootNodes+3))/2;
-        int maxLabel = (int) Math.ceil((double)totalNodes/2);
+        long totalNodes=((long)rootNodes*(rootNodes+3))/2;
+        long maxLabel = (long) Math.ceil((double)totalNodes/2);
 
-        HashMap<Integer, List<Pair>> hashMap=new HashMap<>();
-        HashSet<Integer> hashSet=new HashSet<>();
+        HashMap<Long, List<Pair>> hashMap=new HashMap<>();
+        HashSet<Long> hashSet=new HashSet<>();
 
         GraphLabelling graphLabeler=new GraphLabelling();
         Printers printer=new Printers();
@@ -37,4 +38,5 @@ public class Client {
 
         printer.printMap(hashMap);
     }
+
 }

@@ -2,38 +2,45 @@ import java.util.*;
 
 
 public class GraphLabelling {
-    public void labelGraph(int rootNodes, int maxLabel, HashMap<Integer, List<Pair>> hashMap){
-        int weight=3;
-        hashMap.put(1,new ArrayList<Pair>(Arrays.asList(new Pair(1,2))));
-        int edgeCount=3;
-        int rootNode=2;
-        int i=1;
+    public void labelGraph(int rootNodes, long maxLabel, HashMap<Long, List<Pair>> hashMap){
+        long weight=3;
+        hashMap.put(1L,new ArrayList<Pair>(Arrays.asList(new Pair(2,1))));
+        long edgeCount=3;
+        long rootNode=2;
+        long i=1, usedWeight=-1;
 
         while(i<rootNodes){
-            int j=0;
+            long j=0;
             while(j<edgeCount){
-                int nextLink=weight-rootNode;
-                Pair pair=new Pair(nextLink,weight);
-                if(!hashMap.containsKey(rootNode)) hashMap.put(rootNode,new ArrayList<>());
-                hashMap.get(rootNode).add(pair);
+                long nextLink=weight-rootNode;
+                if(weight!=usedWeight) {
+                    Pair pair = new Pair(weight, nextLink);
+                    if (!hashMap.containsKey(rootNode)) hashMap.put(rootNode, new ArrayList<>());
+                    hashMap.get(rootNode).add(pair);
+                }
                 weight++;
                 j++;
             }
             edgeCount++;
-            if(i==rootNodes-2) rootNode=maxLabel;
+            if(i==rootNodes-2) {
+                usedWeight=maxLabel+rootNode;
+                hashMap.put(maxLabel,new ArrayList<>());
+                hashMap.get(maxLabel).add(new Pair(maxLabel+rootNode,rootNode));
+                rootNode=maxLabel;
+            }
             else rootNode=weight-rootNode;
             i++;
         }
     }
-    public void labelGraphWithLoops(int rootNodes, HashMap<Integer, List<Pair>> hashMap, HashSet<Integer> hashSet){
-        hashMap.put(1,new ArrayList<Pair>(Arrays.asList(new Pair(1,2))));
-        hashSet.add(2);
-        int i=2, rootLimit=2+(4*(rootNodes-2));
+    public void labelGraphWithLoops(int rootNodes, HashMap<Long, List<Pair>> hashMap, HashSet<Long> hashSet){
+        hashMap.put(1l,new ArrayList<Pair>(Arrays.asList(new Pair(1,2))));
+        hashSet.add(2l);
+        long i=2, rootLimit=2+(4*(rootNodes-2));
 
         while(i<=rootLimit){
-            int leftLabel=i+1;
-            int rightLabel=i+2;
-            int prevRootNode=i-4;
+            long leftLabel=i+1;
+            long rightLabel=i+2;
+            long prevRootNode=i-4;
             if(i==2) prevRootNode=1;
 
             if(!hashMap.containsKey(i)) hashMap.put(i,new ArrayList<>());
@@ -54,13 +61,13 @@ public class GraphLabelling {
             i+=4;
         }
 
-        int startRootNode=6, linkCount=1;
+        long startRootNode=6, linkCount=1;
 
         while (startRootNode<=rootLimit){
-            int count=linkCount;
+            long count=linkCount;
 
             while (count>0){
-                int idx=1;
+                long idx=1;
 
                 while (true){
                     if(!hashSet.contains(startRootNode+idx)){
