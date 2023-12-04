@@ -32,57 +32,63 @@ public class GraphLabelling {
             i++;
         }
     }
-    public void labelGraphWithLoops(int rootNodes, HashMap<Long, List<Pair>> hashMap, HashSet<Long> hashSet){
-        hashMap.put(1l,new ArrayList<Pair>(Arrays.asList(new Pair(1,2))));
-        hashSet.add(2l);
-        long i=2, rootLimit=2+(4*(rootNodes-2));
+    public void labelGraphWithLoops(int rootNodes, HashMap<Integer, LinkedList<Integer>> hashMap){
 
-        while(i<=rootLimit){
-            long leftLabel=i+1;
-            long rightLabel=i+2;
-            long prevRootNode=i-4;
-            if(i==2) prevRootNode=1;
+//        Set<Integer> set=new HashSet<>();
+//        set.add(2);
+//        set.add(1);
 
-            if(!hashMap.containsKey(i)) hashMap.put(i,new ArrayList<>());
-            if(!hashMap.containsKey(leftLabel)) hashMap.put(leftLabel,new ArrayList<>());
+        hashMap.put(1,new LinkedList<>(Arrays.asList(2)));
+        hashMap.put(2,new LinkedList<>(Arrays.asList(1)));
 
-            hashMap.get(i).add(new Pair(prevRootNode, i+prevRootNode));
-            hashSet.add(i+prevRootNode);
+        int weight=4;
+        int edgeCount=2;
+        int rootNode=1;
+        int i=1, count=0;
 
-            hashMap.get(i).add(new Pair(leftLabel,i+leftLabel));
-            hashSet.add(i+leftLabel);
+        while(i<rootNodes) {
+            int j = 0;
+            int prevRootNode=rootNode;
+            rootNode = weight - prevRootNode;
+            hashMap.put(rootNode, new LinkedList<Integer>());
+            hashMap.get(rootNode).add(prevRootNode);
+            hashMap.get(prevRootNode).add(rootNode);
 
-            hashMap.get(i).add(new Pair(rightLabel,i+rightLabel));
-            hashSet.add(i+rightLabel);
+//            if(!set.add(prevRootNode+rootNode)){
+//                System.exit(123);
+//            };
 
-            hashMap.get(leftLabel).add(new Pair(rightLabel,leftLabel+rightLabel));
-            hashSet.add(leftLabel+rightLabel);
+            weight = (2 * rootNode) + 1;
 
-            i+=4;
-        }
+            int leftMostChild=weight-rootNode;
+            hashMap.put(leftMostChild, new LinkedList<>());
 
-        long startRootNode=6, linkCount=1;
+            while (j < edgeCount) {
+                int child=weight - rootNode;
+                hashMap.get(rootNode).add(child);
+                if(!hashMap.containsKey(child)) hashMap.put(child,new LinkedList<>());
+                hashMap.get(child).add(rootNode);
 
-        while (startRootNode<=rootLimit){
-            long count=linkCount;
+//                if(!set.add(child+rootNode)){
+//                    System.exit(123);
+//                };
 
-            while (count>0){
-                long idx=1;
-
-                while (true){
-                    if(!hashSet.contains(startRootNode+idx)){
-                        hashSet.add(startRootNode+idx);
-                        hashMap.get(startRootNode).add(new Pair(idx,startRootNode+idx));
-                        break;
-                    }
-                    idx++;
-                }
-                count--;
+                weight++;
+                j++;
             }
-            linkCount++;
-            startRootNode+=4;
-        }
 
-        i+=4;
+            int rightMostChild=weight-rootNode-1;
+
+//            if(!set.add(rightMostChild+leftMostChild)){
+//                System.exit(123);
+//            };
+
+            hashMap.get(leftMostChild).add(rightMostChild);
+            hashMap.get(rightMostChild).add(leftMostChild);
+
+            weight++;
+            edgeCount++;
+            i++;
+        }
     }
 }
