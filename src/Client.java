@@ -14,7 +14,6 @@ public class Client {
         long totalNodes=((long)rootNodes*(rootNodes+3))/2;
         long maxLabel = (long) Math.ceil((double)totalNodes/2);
 
-
         GraphLabelling graphLabeler=new GraphLabelling();
         Printers printer=new Printers();
 
